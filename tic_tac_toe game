@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+
+//Create a 3x3 board for the TIC-TAC-TOE
+char board[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
+
+
+// Åêôýðùóç ôçò ôñßëéæáò
+void printBoard() {
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            cout << board[i][j];
+            if(j < 2) cout << "  | ";
+        }
+        cout << endl;
+        if(i < 2) cout << "---+----+---" << endl;
+    }
+}
+// Win check 
+bool checkWin(char player) {
+    for(int i = 0; i < 3; i++) {
+        if((board[i][0] == player && board[i][1] == player && board[i][2] == player) ||  // Check rows
+           (board[0][i] == player && board[1][i] == player && board[2][i] == player)) {  // Check columns
+            return true;
+        }
+    }
+    
+    // Check diagonals
+    if((board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
+       (board[0][2] == player && board[1][1] == player && board[2][0] == player)) {
+        return true;
+    }
+    return false;
+}
+
+// Check for completion of all cells in the table and tie check
+bool checkDraw() {
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            if(board[i][j] == ' ') return false;
+        }
+    }
+    return true;
+}
+
+// Checking the validity of moves
+bool isValidMove(int row, int col) {
+    return row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == ' ';
+}
+
+
+int main() {
+    char currentPlayer = 'X';
+    int row, col;
+    while(true) {
+        printBoard();
+        cout << "Player " << currentPlayer << ", enter your move (row and column): ";
+        cin >> row >> col;
+        if(isValidMove(row, col)) {
+            board[row][col] = currentPlayer;
+            if(checkWin(currentPlayer)) {
+                printBoard();
+                cout << "Player " << currentPlayer << " wins!" << endl;
+                break;
+            } else if(checkDraw()) {
+                printBoard();
+                cout << "It's a draw!" << endl;
+                break;
+            } else {
+                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+            }
+        } else {
+            cout << "Invalid move. Try again." << endl;
+        }
+    }
+    return 0;
+}
